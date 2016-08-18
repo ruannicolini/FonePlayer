@@ -11,7 +11,7 @@ uses
   Buttons,
   ImgList,
   OleCtrls, SHDocVw,
-  ToolWin, System.ImageList;
+  ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg;
 
   type
   TForm1 = class(TForm)
@@ -84,11 +84,13 @@ uses
     procedure Panel10MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure Image1DblClick(Sender: TObject);
+    procedure SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
   public
     { Public declarations }
-    
+
   end;
 
 var
@@ -144,6 +146,7 @@ end;
 procedure TForm1.Timer1Timer(Sender: TObject);
 var
   i:Integer;
+  StatusRemoverArquivo : integer;
 begin
   if (ListBox1.Items.Count -1) > 0 then
       btnTocar.Enabled := true;
@@ -156,6 +159,8 @@ begin
     begin
       if ((ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[IndPlayList])) then
       begin
+        if(FileExists(RichEdit1.Lines[i]))then
+        begin
         MediaPlayer1.FileName := RichEdit1.Lines[i];
         MediaPlayer1.Open;
         StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
@@ -171,7 +176,20 @@ begin
         MediaPlayer1.Play;
 
         ListBox1.Selected[IndPlayList] := true;
-
+        end else
+        begin
+          //nesse caso o arquivo esta na lista mais não existe mais
+          StatusRemoverArquivo := Application.MessageBox('Arquivo não encontrado. Deseja remover-lo da playList?', 'Arquivo Inexistente', mb_iconinformation + MB_YESNO);
+          if(StatusRemoverArquivo = 6)then
+          begin
+              //
+              RichEdit1.Lines.Delete(i);
+              ListBox1.Items.Delete(IndPlayList);
+              IndPlayList := IndPlayList -1;
+          end;
+          MediaPlayer1.Next;
+          StatusRemoverArquivo := 0;
+        end;
       end;
       status := false;
     end;
@@ -227,7 +245,12 @@ begin
         for i := 0 to RichEdit1.Lines.Count -1 do
         begin
           str := RichEdit1.Lines[i];
-          ListBox1.Items.Add(ExtractFileName(str));
+          //if(FileExists(str))then
+          //begin
+              ListBox1.Items.Add(ExtractFileName(str));
+          //end;
+
+
         end;
       end;
 
@@ -244,7 +267,7 @@ begin
               if (ListBox1.Items[i] = str) then
                 IndPlayList := i;
             end;
-            
+
             Readln(arquivo, posicaoPlayer);
         end;
         {ListBox1.Selected[IndPlayList] := true; }
@@ -357,7 +380,7 @@ begin
     if (ListBox1.Items[i] = strAux) then
       IndPlayList := i;
   end;
-  
+
 end;
 
 procedure TForm1.ListBox1DragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -389,6 +412,17 @@ begin
       ItemIndex := DropIndex;
     end;
   end;
+end;
+
+procedure TForm1.SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  {se botao já foi pressionado}
+  if(TSpeedButton(Sender).Down)then
+    exit  //sai da função
+  else
+    {primeira vez que pressiona}
+    ShowMessage('clicado'); //sua rotina
 end;
 
 procedure TForm1.SpeedButton5Click(Sender: TObject);
@@ -510,13 +544,20 @@ var
   i:integer;
 begin
   for i := 0 to RichEdit1.Lines.Count -1 do
-    begin
+  begin
       if ((ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[ListBox1.ItemIndex])) then
       begin
         RichEdit1.Lines.Delete(i);
       end;
       status := false;
-    end;
+  end;
+
+  if( ListBox1.ItemIndex = IndPlayList)then
+  begin
+    IndPlayList := IndPlayList -1;
+    MediaPlayer1.Next;
+  end;
+
   ListBox1.DeleteSelected;
 
 end;
@@ -555,7 +596,7 @@ begin
   MediaPlayer1.Rewind;
   MediaPlayer1.Stop;
   btnTocar.Caption := 'Tocar';
-  chkRA.Visible := false;  
+  chkRA.Visible := false;
 end;
 
 procedure TForm1.Panel3MouseUp(Sender: TObject; Button: TMouseButton;

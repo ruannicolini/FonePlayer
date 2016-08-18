@@ -18223,6 +18223,23 @@ object Form1: TForm1
             TabOrder = 3
             Visible = False
           end
+          object RichEdit1: TRichEdit
+            Left = 885
+            Top = 1
+            Width = 164
+            Height = 496
+            Align = alRight
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 4
+            WordWrap = False
+            Zoom = 100
+          end
         end
       end
     end
@@ -25440,25 +25457,8 @@ object Form1: TForm1
         Enabled = False
         OnClick = btnRemoveClick
       end
-      object RichEdit1: TRichEdit
-        Left = 40
-        Top = 272
-        Width = 146
-        Height = 164
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        Color = clWhite
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 0
-        WordWrap = False
-        Zoom = 100
-      end
       object ListBox1: TListBox
-        Left = 20
+        Left = 21
         Top = 8
         Width = 183
         Height = 431
@@ -25466,7 +25466,7 @@ object Form1: TForm1
         ItemHeight = 13
         ParentShowHint = False
         ShowHint = False
-        TabOrder = 1
+        TabOrder = 0
         OnDblClick = ListBox1DblClick
         OnDragDrop = ListBox1DragDrop
         OnDragOver = ListBox1DragOver
@@ -25503,7 +25503,7 @@ object Form1: TForm1
     Left = 992
     Top = 80
     Bitmap = {
-      494C010101000400100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000400140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
