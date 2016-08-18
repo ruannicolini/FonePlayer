@@ -140,7 +140,7 @@ begin
       MediaPlayer2.Open;
       Timer1.Enabled := true;
     end
- }
+}
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -184,6 +184,7 @@ begin
           begin
               //
               RichEdit1.Lines.Delete(i);
+              RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
               ListBox1.Items.Delete(IndPlayList);
               IndPlayList := IndPlayList -1;
           end;
@@ -245,11 +246,7 @@ begin
         for i := 0 to RichEdit1.Lines.Count -1 do
         begin
           str := RichEdit1.Lines[i];
-          //if(FileExists(str))then
-          //begin
-              ListBox1.Items.Add(ExtractFileName(str));
-          //end;
-
+          ListBox1.Items.Add(ExtractFileName(str));
 
         end;
       end;
@@ -273,13 +270,11 @@ begin
         {ListBox1.Selected[IndPlayList] := true; }
         CloseFile(Arquivo);
         status := false;
-      end
-        else
-        begin
+      end else
+      begin
           IndPlayList := 0;
           posicaoPlayer := 0;
-        end;
-
+      end;
 
 end;
 
@@ -320,20 +315,23 @@ end;
   { Abrir proteção de tela
   SendMessage(Application.Handle, WM_SYSCOMMAND, SC_SCREENSAVE, 0); }
 
-
-  if (btnTocar.Caption = 'Parar Play List') then
+  if( ListBox1.Count > 0)then
   begin
-    btnTocar.Caption := 'Tocar';
-    chkRA.Visible := false;
-    MediaPlayer1.Stop;
+      if (btnTocar.Caption = 'Parar Play List') then
+      begin
+        btnTocar.Caption := 'Tocar';
+        chkRA.Visible := false;
+        MediaPlayer1.Stop;
+      end else
+        begin
+        btnTocar.Caption := 'Parar Play List';
+        status := true;
+        Timer1.Enabled := true;
+        chkRA.Visible := true;
+        chkRA.Checked:= false;
+      end;
   end else
-    begin
-    btnTocar.Caption := 'Parar Play List';
-    status := true;
-    Timer1.Enabled := true;
-    chkRA.Visible := true;
-    chkRA.Checked:= false;
-  end;
+    ShowMessage('Adicione arquivos a PlayList');
 
 end;
 
@@ -469,13 +467,13 @@ end;
 procedure TForm1.btnAddClick(Sender: TObject);
 begin
   if OpenDialog1.Execute then
-    begin
+  begin
       RichEdit1.Lines.Add(OpenDialog1.FileName);
       RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
       ListBox1.Items.Add(ExtractFileName(OpenDialog1.FileName));
-      btnTocar.Enabled := true
-
-    end
+      btnTocar.Enabled := true;
+  end;
+  OpenDialog1.FileName := '';
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -489,46 +487,43 @@ begin
       Windows.DeleteFile(PChar(extractFilepath(application.exename) + 'IndPlayList.txt'));
   end;
 
-
   if(MediaPlayer1.Position <> ProgressBar1.Max)then
   begin
-      if (ListBox1.Items.Count -1) > 0 then
-      begin
+    if(ListBox1.Count > 0)then
+    begin
+
         AssignFile(arquivo, (extractFilepath(application.exename) + 'IndPlayList.txt') );
         rewrite(Arquivo);
-
         WriteLn(arquivo, ListBox1.Items[IndPlayList]);
         WriteLn(arquivo, MediaPlayer1.Position);
         CloseFile(Arquivo);
 
 
-          {OBS: Melhorar Isso aqui, ta tenso!}
-          AssignFile(arquivo, (extractFilepath(application.exename) + 'test.txt') );
-          Rewrite(arquivo);
-          for iListB := 0 to ListBox1.Items.Count-1 do
+       {OBS: Melhorar Isso aqui, ta tenso!}
+       AssignFile(arquivo, (extractFilepath(application.exename) + 'test.txt') );
+       Rewrite(arquivo);
+       for iListB := 0 to ListBox1.Items.Count-1 do
+       begin
+          for i := 0 to RichEdit1.Lines.Count-1 do
           begin
-            for i := 0 to RichEdit1.Lines.Count-1 do
-            begin
-              if ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[iListB] then
-                  WriteLn(arquivo, RichEdit1.Lines[i]);
-            end;
+            if ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[iListB] then
+                WriteLn(arquivo, RichEdit1.Lines[i]);
           end;
-          CloseFile(Arquivo);
+       end;
+       CloseFile(Arquivo);
 
-          RichEdit1.Lines.Clear;
-          AssignFile(arquivo, (extractFilepath(application.exename) + 'test.txt') );
-          reset(arquivo);
-          While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
-          begin
-                Readln(arquivo, srtArq);
-                RichEdit1.Lines.Add(srtArq);
-          end;
-          CloseFile(Arquivo);
-          RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
-
-      end;
+       RichEdit1.Lines.Clear;
+       AssignFile(arquivo, (extractFilepath(application.exename) + 'test.txt') );
+       reset(arquivo);
+       While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
+       begin
+              Readln(arquivo, srtArq);
+              RichEdit1.Lines.Add(srtArq);
+       end;
+       CloseFile(Arquivo);
+       RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
+    end;
   end;
-
 end;
 
 procedure TForm1.ListBox1Enter(Sender: TObject);
@@ -548,16 +543,19 @@ begin
       if ((ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[ListBox1.ItemIndex])) then
       begin
         RichEdit1.Lines.Delete(i);
+        RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
       end;
       status := false;
   end;
 
-  if( ListBox1.ItemIndex = IndPlayList)then
+  if(ListBox1.Count -1 > 1)then
   begin
-    IndPlayList := IndPlayList -1;
-    MediaPlayer1.Next;
+      if( ListBox1.ItemIndex = IndPlayList)then
+      begin
+        IndPlayList := IndPlayList -1;
+        MediaPlayer1.Next;
+      end;
   end;
-
   ListBox1.DeleteSelected;
 
 end;
@@ -653,20 +651,21 @@ begin
   btnTocar.Caption := 'Tocar';
 
   if OpenDialog1.Execute then
-    begin
+  begin
       MediaPlayer1.FileName := OpenDialog1.FileName;
-      StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
-      ProgressBar1.Min := 0;
-
       if(MediaPlayer1.FileName <> '')then
       begin
+        StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
+        ProgressBar1.Min := 0;
+
         MediaPlayer1.Open;
         ProgressBar1.Max := MediaPlayer1.Length;
         ProgressBar1.Position := MediaPlayer1.Position;
         Timer1.Enabled := true;
         MediaPlayer1.Play;
       end;
-    end
+  end;
+  OpenDialog1.FileName := '';
 
 
 end;

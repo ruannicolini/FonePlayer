@@ -7097,7 +7097,7 @@ object Form1: TForm1
     Top = 0
     Width = 1070
     Height = 571
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alCustom
     Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = ANSI_CHARSET
