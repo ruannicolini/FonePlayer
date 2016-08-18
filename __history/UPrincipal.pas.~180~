@@ -562,7 +562,9 @@ begin
       chkRA.Visible := false;
       MediaPlayer1.Close;
       MediaPlayer1.Open;
+      MediaPlayer1.FileName := '';
       status := false; //D*
+
   end;
   ListBox1.DeleteSelected;
 

@@ -50,7 +50,6 @@ uses
     Panel1: TPanel;
     Image1: TImage;
     XPManifest1: TXPManifest;
-    MediaPlayer2: TMediaPlayer;
     procedure Panel4DblClick(Sender: TObject);
     procedure Panel10DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -323,6 +322,7 @@ end;
         btnTocar.Caption := 'Tocar';
         chkRA.Visible := false;
         MediaPlayer1.Stop;
+        status := false; //D*
       end else
         begin
         btnTocar.Caption := 'Parar Play List';
@@ -556,6 +556,13 @@ begin
         IndPlayList := IndPlayList -1;
         MediaPlayer1.Next;
       end;
+  end else
+  begin
+      btnTocar.Caption := 'Tocar';
+      chkRA.Visible := false;
+      MediaPlayer1.close;
+      status := false; //D*
+
   end;
   ListBox1.DeleteSelected;
 

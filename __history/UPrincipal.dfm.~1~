@@ -18237,7 +18237,6 @@ object Form1: TForm1
             Font.Style = []
             ParentFont = False
             TabOrder = 4
-            Visible = False
             WordWrap = False
             Zoom = 100
           end

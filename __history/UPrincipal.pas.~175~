@@ -560,8 +560,7 @@ begin
   begin
       btnTocar.Caption := 'Tocar';
       chkRA.Visible := false;
-      MediaPlayer1.Close;
-      MediaPlayer1.Open;
+      MediaPlayer1.Stop;
       status := false; //D*
   end;
   ListBox1.DeleteSelected;

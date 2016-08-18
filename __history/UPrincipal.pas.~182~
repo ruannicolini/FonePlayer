@@ -563,6 +563,7 @@ begin
       MediaPlayer1.Close;
       MediaPlayer1.Open;
       status := false; //D*
+
   end;
   ListBox1.DeleteSelected;
 
