@@ -18241,6 +18241,15 @@ object Form1: TForm1
             WordWrap = False
             Zoom = 100
           end
+          object TrackBar1: TTrackBar
+            Left = 720
+            Top = 16
+            Width = 150
+            Height = 45
+            TabOrder = 5
+            Visible = False
+            OnChange = TrackBar1Change
+          end
         end
       end
     end
@@ -25504,7 +25513,7 @@ object Form1: TForm1
     Left = 992
     Top = 80
     Bitmap = {
-      494C010101000400140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000400240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

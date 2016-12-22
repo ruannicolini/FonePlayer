@@ -11,7 +11,9 @@ uses
   Buttons,
   ImgList,
   OleCtrls, SHDocVw,
-  ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg;
+  ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg,
+  Registry, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
+  cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar;
 
   type
   TForm1 = class(TForm)
@@ -50,6 +52,7 @@ uses
     Panel1: TPanel;
     Image1: TImage;
     XPManifest1: TXPManifest;
+    TrackBar1: TTrackBar;
     procedure Panel4DblClick(Sender: TObject);
     procedure Panel10DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -86,6 +89,7 @@ uses
     procedure Image1DblClick(Sender: TObject);
     procedure SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure TrackBar1Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -117,10 +121,16 @@ begin
 
       MediaPlayer1.Open;
       StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
+
       ProgressBar1.Min := 0;
+      trackBar1.Min := 0;
 
       ProgressBar1.Max := MediaPlayer1.Length;
+      trackBar1.Max := MediaPlayer1.Length;
+
       ProgressBar1.Position := MediaPlayer1.Position;
+      trackBar1.Position := MediaPlayer1.Position;
+
       Timer1.Enabled := true;
     end
 
@@ -148,13 +158,12 @@ var
   i:Integer;
   StatusRemoverArquivo : integer;
 begin
-  if (ListBox1.Items.Count -1) > 0 then
-      btnTocar.Enabled := true;
+    if (ListBox1.Items.Count -1) > 0 then
+    begin
+        btnTocar.Enabled := true;
+    end;
 
-  if Progressbar1.Max <> 0 then
-      Progressbar1.Position := mediaplayer1.Position;
-
-  if ((btnTocar.Caption = 'Parar Play List') and(status = true)) then
+    if ((btnTocar.Caption = 'Parar Play List') and(status = true)) then
     for i := 0 to ListBox1.Count -1 do
     begin
       if ((ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[IndPlayList])) then
@@ -164,13 +173,18 @@ begin
         MediaPlayer1.FileName := RichEdit1.Lines[i];
         MediaPlayer1.Open;
         StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
+
         ProgressBar1.Min := 0;
+        trackBar1.Min := 0;
+        ProgressBar1.Max := MediaPlayer1.Length;
+        trackBar1.Max := MediaPlayer1.Length;
 
         MediaPlayer1.Position := posicaoPlayer;
         posicaoPlayer := 0;
 
-        ProgressBar1.Max := MediaPlayer1.Length;
         ProgressBar1.Position := MediaPlayer1.Position;
+        trackBar1.Position := MediaPlayer1.Position;
+
         status := false;
         Timer1.Enabled := true;
         MediaPlayer1.Play;
@@ -195,7 +209,13 @@ begin
       status := false;
     end;
 
-  if (Progressbar1.Position = Progressbar1.Max) then
+    if Progressbar1.Max <> 0 then
+    begin
+      Progressbar1.Position := mediaplayer1.Position;
+      //trackbar1.Position := mediaplayer1.Position;
+    end;
+
+    if (Progressbar1.Position = Progressbar1.Max) then
     begin
       if (btnTocar.Caption = 'Parar Play List') then
         begin
@@ -219,6 +239,12 @@ begin
         end
     end;
 
+end;
+
+procedure TForm1.TrackBar1Change(Sender: TObject);
+begin
+  MediaPlayer1.Position := TrackBar1.Position;
+  MediaPlayer1.Play;
 end;
 
 procedure TForm1.btnPauseClick(Sender: TObject);
@@ -572,26 +598,25 @@ procedure TForm1.btnPlayPauseClick(Sender: TObject);
 begin
   if (MediaPlayer1.Mode = mpPlaying)then
   begin
-    ShowMessage('Tocando!');
+    //ShowMessage('Tocando!');
   end;
 
   if(MediaPlayer1.FileName = '')then
   begin
     Image1DblClick(sender);
-
   end;
 
   if(MediaPlayer1.Mode = mpPaused)then
   begin
-     ShowMessage('mpPaused');
      //MP Pausado
+     //ShowMessage('mpPaused');
      MediaPlayer1.Play;
   end;
 
   if(MediaPlayer1.Mode = mpStopped)then
   begin
-     ShowMessage('mpStopped');
      //MP Em Stop
+     //ShowMessage('mpStopped');
      MediaPlayer1.Play;
   end;
 
@@ -665,10 +690,13 @@ begin
       begin
         StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
         ProgressBar1.Min := 0;
+        trackBar1.Min := 0;
 
         MediaPlayer1.Open;
         ProgressBar1.Max := MediaPlayer1.Length;
+        trackBar1.Max := MediaPlayer1.Length;
         ProgressBar1.Position := MediaPlayer1.Position;
+        trackBar1.Position := MediaPlayer1.Position;
         Timer1.Enabled := true;
         MediaPlayer1.Play;
       end;
