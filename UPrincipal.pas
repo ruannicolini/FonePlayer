@@ -13,7 +13,8 @@ uses
   OleCtrls, SHDocVw,
   ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg,
   Registry, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
-  cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar;
+  cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar,
+  Vcl.AppEvnts;
 
   type
   TForm1 = class(TForm)

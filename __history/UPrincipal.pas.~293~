@@ -158,11 +158,10 @@ var
   i:Integer;
   StatusRemoverArquivo : integer;
 begin
-  if (ListBox1.Items.Count -1) > 0 then
-  begin
-      btnTocar.Enabled := true;
-  end;
-
+    if (ListBox1.Items.Count -1) > 0 then
+    begin
+        btnTocar.Enabled := true;
+    end;
 
     if ((btnTocar.Caption = 'Parar Play List') and(status = true)) then
     for i := 0 to ListBox1.Count -1 do
@@ -212,7 +211,6 @@ begin
 
     if Progressbar1.Max <> 0 then
     begin
-
       Progressbar1.Position := mediaplayer1.Position;
       //trackbar1.Position := mediaplayer1.Position;
     end;

@@ -18247,6 +18247,7 @@ object Form1: TForm1
             Width = 150
             Height = 45
             TabOrder = 5
+            Visible = False
             OnChange = TrackBar1Change
           end
         end
@@ -25512,7 +25513,7 @@ object Form1: TForm1
     Left = 992
     Top = 80
     Bitmap = {
-      494C0101010004001C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000400240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -25654,5 +25655,10 @@ object Form1: TForm1
   object XPManifest1: TXPManifest
     Left = 978
     Top = 50
+  end
+  object ApplicationEvents1: TApplicationEvents
+    OnException = ApplicationEvents1Exception
+    Left = 498
+    Top = 66
   end
 end

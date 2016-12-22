@@ -13,7 +13,8 @@ uses
   OleCtrls, SHDocVw,
   ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg,
   Registry, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
-  cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar;
+  cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar,
+  Vcl.AppEvnts;
 
   type
   TForm1 = class(TForm)
@@ -53,7 +54,7 @@ uses
     Image1: TImage;
     XPManifest1: TXPManifest;
     TrackBar1: TTrackBar;
-    Timer2: TTimer;
+    ApplicationEvents1: TApplicationEvents;
     procedure Panel4DblClick(Sender: TObject);
     procedure Panel10DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -91,7 +92,6 @@ uses
     procedure SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure TrackBar1Change(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
   private
     { Private declarations }
   public
@@ -160,11 +160,10 @@ var
   i:Integer;
   StatusRemoverArquivo : integer;
 begin
-  if (ListBox1.Items.Count -1) > 0 then
-  begin
-      btnTocar.Enabled := true;
-  end;
-
+    if (ListBox1.Items.Count -1) > 0 then
+    begin
+        btnTocar.Enabled := true;
+    end;
 
     if ((btnTocar.Caption = 'Parar Play List') and(status = true)) then
     for i := 0 to ListBox1.Count -1 do
@@ -214,7 +213,6 @@ begin
 
     if Progressbar1.Max <> 0 then
     begin
-
       Progressbar1.Position := mediaplayer1.Position;
       //trackbar1.Position := mediaplayer1.Position;
     end;
@@ -243,14 +241,6 @@ begin
         end
     end;
 
-end;
-
-procedure TForm1.Timer2Timer(Sender: TObject);
-begin
-  if(ProgressBar1.Position mod 5 = 0)then
-  begin
-  TrackBar1.Position := ProgressBar1.Position;
-  end;
 end;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);
