@@ -91,6 +91,7 @@ uses
     procedure SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure TrackBar1Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -264,45 +265,7 @@ var
   i:integer;
   str:String;
 begin
-      if (fileexists(extractFilepath(application.exename) + 'test.txt')) then
-      begin
-        RichEdit1.Lines.LoadFromFile(extractFilepath(application.exename) + 'test.txt');
-        StatusBar1.Panels.Items[0].Text := 'Arquivo test.txt';
-        btnTocar.Enabled := true;
-
-        for i := 0 to RichEdit1.Lines.Count -1 do
-        begin
-          str := RichEdit1.Lines[i];
-          ListBox1.Items.Add(ExtractFileName(str));
-
-        end;
-      end;
-
-
-      if (fileexists(extractFilepath(application.exename) + 'IndPlayList.txt')) then
-      begin
-        AssignFile(arquivo, (extractFilepath(application.exename) + 'IndPlayList.txt') );
-        reset(arquivo);
-        While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
-        begin
-            Readln(arquivo, str);
-            for i := 0 to ListBox1.Items.Count-1 do
-            begin
-              if (ListBox1.Items[i] = str) then
-                IndPlayList := i;
-            end;
-
-            Readln(arquivo, posicaoPlayer);
-        end;
-        {ListBox1.Selected[IndPlayList] := true; }
-        CloseFile(Arquivo);
-        status := false;
-      end else
-      begin
-          IndPlayList := 0;
-          posicaoPlayer := 0;
-      end;
-
+//
 end;
 
 procedure TForm1.btnTocarClick(Sender: TObject);
@@ -551,6 +514,76 @@ begin
        CloseFile(Arquivo);
        RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
     end;
+  end;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+var
+  i:integer;
+  str:String;
+begin
+  if (FileExists(ParamStr(1))) or (ParamStr(1) <> '') then
+  begin
+      MediaPlayer1.FileName := ParamStr(1);
+      if(MediaPlayer1.FileName <> '')then
+      begin
+        StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
+        ProgressBar1.Min := 0;
+        trackBar1.Min := 0;
+
+        MediaPlayer1.Open;
+        ProgressBar1.Max := MediaPlayer1.Length;
+        trackBar1.Max := MediaPlayer1.Length;
+        ProgressBar1.Position := MediaPlayer1.Position;
+        trackBar1.Position := MediaPlayer1.Position;
+        Timer1.Enabled := true;
+        MediaPlayer1.Play;
+      end;
+  end else
+  begin
+
+      //LEITURA DE ARQUIVOS
+        if (fileexists(extractFilepath(application.exename) + 'test.txt')) then
+        begin
+          RichEdit1.Lines.LoadFromFile(extractFilepath(application.exename) + 'test.txt');
+          StatusBar1.Panels.Items[0].Text := 'Aguardando Música... ';// 'Arquivo test.txt';
+          btnTocar.Enabled := true;
+
+          for i := 0 to RichEdit1.Lines.Count -1 do
+          begin
+            str := RichEdit1.Lines[i];
+            ListBox1.Items.Add(ExtractFileName(str));
+
+          end;
+        end;
+
+
+        if (fileexists(extractFilepath(application.exename) + 'IndPlayList.txt')) then
+        begin
+          AssignFile(arquivo, (extractFilepath(application.exename) + 'IndPlayList.txt') );
+          reset(arquivo);
+          While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
+          begin
+              Readln(arquivo, str);
+              for i := 0 to ListBox1.Items.Count-1 do
+              begin
+                if (ListBox1.Items[i] = str) then
+                  IndPlayList := i;
+              end;
+
+              Readln(arquivo, posicaoPlayer);
+          end;
+          {ListBox1.Selected[IndPlayList] := true; }
+          CloseFile(Arquivo);
+          status := false;
+        end else
+        begin
+            IndPlayList := 0;
+            posicaoPlayer := 0;
+        end;
+
+
+
   end;
 end;
 
