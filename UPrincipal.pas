@@ -14,10 +14,10 @@ uses
   ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg,
   Registry, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
   cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar,
-  Vcl.AppEvnts;
+  Vcl.AppEvnts, System.Types;
 
   type
-  TForm1 = class(TForm)
+  TPrincipalFonePlayer = class(TForm)
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
@@ -100,7 +100,7 @@ uses
   end;
 
 var
-  Form1: TForm1;
+  PrincipalFonePlayer: TPrincipalFonePlayer;
   IndPlayList: Integer;
   posicaoPlayer : Integer;
   posicaoAux : Integer;
@@ -108,11 +108,12 @@ var
   arquivo: TextFile;
   statusBtnPlayPause : Boolean;
 
+
 implementation
 
 {$R *.dfm}
 
-procedure TForm1.Panel4DblClick(Sender: TObject);
+procedure TPrincipalFonePlayer.Panel4DblClick(Sender: TObject);
 begin
   btnTocar.Caption := 'Tocar';
   MediaPlayer1.Close;
@@ -138,7 +139,7 @@ begin
 
 
 end;
-procedure TForm1.Panel10DblClick(Sender: TObject);
+procedure TPrincipalFonePlayer.Panel10DblClick(Sender: TObject);
 begin
 {
   MediaPlayer1.Close;
@@ -155,7 +156,7 @@ begin
 }
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TPrincipalFonePlayer.Timer1Timer(Sender: TObject);
 var
   i:Integer;
   StatusRemoverArquivo : integer;
@@ -243,24 +244,24 @@ begin
 
 end;
 
-procedure TForm1.TrackBar1Change(Sender: TObject);
+procedure TPrincipalFonePlayer.TrackBar1Change(Sender: TObject);
 begin
   MediaPlayer1.Position := TrackBar1.Position;
   MediaPlayer1.Play;
 end;
 
-procedure TForm1.btnPauseClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnPauseClick(Sender: TObject);
 begin
   {PageControl1.ActivePageIndex := 0; }
   MediaPlayer1.Pause;
 end;
 
-procedure TForm1.FormResize(Sender: TObject);
+procedure TPrincipalFonePlayer.FormResize(Sender: TObject);
 begin
   //MediaPlayer2.DisplayRect := Panel10.ClientRect;
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TPrincipalFonePlayer.FormShow(Sender: TObject);
 var
   i:integer;
   str:String;
@@ -268,7 +269,7 @@ begin
 //
 end;
 
-procedure TForm1.btnTocarClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnTocarClick(Sender: TObject);
 var
   WSidesOfScreenH, WSidesOfScreenV: Integer;
 begin
@@ -326,7 +327,7 @@ end;
 
 end;
 
-procedure TForm1.btnMoveCimaClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnMoveCimaClick(Sender: TObject);
 var
 posicao: integer;
 strAux: String;
@@ -348,7 +349,7 @@ begin
   end;
 end;
 
-procedure TForm1.btnMoveBaixoClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnMoveBaixoClick(Sender: TObject);
 var
 posicao: integer;
 strAux: String;
@@ -372,7 +373,7 @@ begin
 
 end;
 
-procedure TForm1.ListBox1DragDrop(Sender, Source: TObject; X, Y: Integer);
+procedure TPrincipalFonePlayer.ListBox1DragDrop(Sender, Source: TObject; X, Y: Integer);
 var
   DropIndex: Integer;
 begin
@@ -384,7 +385,7 @@ begin
   end;
 end;
 
-procedure TForm1.ListBox1DragOver(Sender, Source: TObject; X, Y: Integer;
+procedure TPrincipalFonePlayer.ListBox1DragOver(Sender, Source: TObject; X, Y: Integer;
   State: TDragState; var Accept: Boolean);
 var
   DropIndex: Integer;
@@ -403,7 +404,7 @@ begin
   end;
 end;
 
-procedure TForm1.SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.SpeedButton1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   {se botao já foi pressionado}
@@ -414,7 +415,7 @@ begin
     ShowMessage('clicado'); //sua rotina
 end;
 
-procedure TForm1.SpeedButton5Click(Sender: TObject);
+procedure TPrincipalFonePlayer.SpeedButton5Click(Sender: TObject);
 begin
 if (btnTocar.Caption = 'Parar Play List') then
   begin
@@ -436,7 +437,7 @@ if (btnTocar.Caption = 'Parar Play List') then
 
 end;
 
-procedure TForm1.SpeedButton6Click(Sender: TObject);
+procedure TPrincipalFonePlayer.SpeedButton6Click(Sender: TObject);
 begin
     if(IndPlayList = 0) then
     begin
@@ -455,7 +456,7 @@ begin
 
 end;
 
-procedure TForm1.btnAddClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnAddClick(Sender: TObject);
 begin
   if OpenDialog1.Execute then
   begin
@@ -467,7 +468,7 @@ begin
   OpenDialog1.FileName := '';
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TPrincipalFonePlayer.FormClose(Sender: TObject; var Action: TCloseAction);
 var
   i: integer;
   iListB:integer;
@@ -517,34 +518,40 @@ begin
   end;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TPrincipalFonePlayer.FormCreate(Sender: TObject);
 var
   i:integer;
   str:String;
 begin
+
+  //verifica se foi passado algum caminho de música
   if (FileExists(ParamStr(1))) or (ParamStr(1) <> '') then
   begin
       MediaPlayer1.FileName := ParamStr(1);
       if(MediaPlayer1.FileName <> '')then
       begin
-        StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
-        ProgressBar1.Min := 0;
-        trackBar1.Min := 0;
-
-        MediaPlayer1.Open;
-        ProgressBar1.Max := MediaPlayer1.Length;
-        trackBar1.Max := MediaPlayer1.Length;
-        ProgressBar1.Position := MediaPlayer1.Position;
-        trackBar1.Position := MediaPlayer1.Position;
-        Timer1.Enabled := true;
-        MediaPlayer1.Play;
+          //Se sim, verifica o formato e reproduz a música
+          if(extractfileext(ParamStr(1)) = '.mp3')then
+          begin
+              StatusBar1.Panels.Items[0].Text := 'AGORA:   ' + ExtractFileName(MediaPlayer1.FileName);
+              ProgressBar1.Min := 0;
+              trackBar1.Min := 0;
+              MediaPlayer1.Open;
+              ProgressBar1.Max := MediaPlayer1.Length;
+              trackBar1.Max := MediaPlayer1.Length;
+              ProgressBar1.Position := MediaPlayer1.Position;
+              trackBar1.Position := MediaPlayer1.Position;
+              Timer1.Enabled := true;
+              MediaPlayer1.Play;
+          end;
       end;
   end else
   begin
 
       //LEITURA DE ARQUIVOS
-        if (fileexists(extractFilepath(application.exename) + 'test.txt')) then
-        begin
+      //Se não foi passado nenhum caminho, tenta carregar Playlist;
+      if (fileexists(extractFilepath(application.exename) + 'test.txt')) then
+      begin
           RichEdit1.Lines.LoadFromFile(extractFilepath(application.exename) + 'test.txt');
           StatusBar1.Panels.Items[0].Text := 'Aguardando Música... ';// 'Arquivo test.txt';
           btnTocar.Enabled := true;
@@ -555,11 +562,12 @@ begin
             ListBox1.Items.Add(ExtractFileName(str));
 
           end;
-        end;
+      end;
 
 
-        if (fileexists(extractFilepath(application.exename) + 'IndPlayList.txt')) then
-        begin
+      //Se não foi passado nenhum caminho, tenta carregar musica que estava tocando da ultima vez;
+      if (fileexists(extractFilepath(application.exename) + 'IndPlayList.txt')) then
+      begin
           AssignFile(arquivo, (extractFilepath(application.exename) + 'IndPlayList.txt') );
           reset(arquivo);
           While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
@@ -576,18 +584,16 @@ begin
           {ListBox1.Selected[IndPlayList] := true; }
           CloseFile(Arquivo);
           status := false;
-        end else
-        begin
-            IndPlayList := 0;
-            posicaoPlayer := 0;
-        end;
+      end else
+      begin
+          IndPlayList := 0;
+          posicaoPlayer := 0;
+      end;
 
-
-
-  end;
+  end;
 end;
 
-procedure TForm1.ListBox1Enter(Sender: TObject);
+procedure TPrincipalFonePlayer.ListBox1Enter(Sender: TObject);
 begin
   btnMoveCima.Enabled := true;
   btnMoveBaixo.Enabled := true;
@@ -595,7 +601,7 @@ begin
   btnRemove.Enabled := true;
 end;
 
-procedure TForm1.btnRemoveClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnRemoveClick(Sender: TObject);
 var
   i:integer;
 begin
@@ -628,7 +634,7 @@ begin
 
 end;
 
-procedure TForm1.btnPlayPauseClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnPlayPauseClick(Sender: TObject);
 begin
   if (MediaPlayer1.Mode = mpPlaying)then
   begin
@@ -656,7 +662,7 @@ begin
 
 end;
 
-procedure TForm1.btnStopClick(Sender: TObject);
+procedure TPrincipalFonePlayer.btnStopClick(Sender: TObject);
 begin
   MediaPlayer1.Rewind;
   MediaPlayer1.Stop;
@@ -664,37 +670,37 @@ begin
   chkRA.Visible := false;
 end;
 
-procedure TForm1.Panel3MouseUp(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.Panel3MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   Panel3.Visible := false;
 end;
 
-procedure TForm1.Panel4MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.Panel4MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   panel3.Visible := true;
 end;
 
-procedure TForm1.Panel3MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.Panel3MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   panel3.Visible := false;
 end;
 
-procedure TForm1.Image3MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.Image3MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   panel3.Visible := false;
 end;
 
-procedure TForm1.Panel7MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.Panel7MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   panel3.Visible := false;
 end;
 
-procedure TForm1.ListBox1DblClick(Sender: TObject);
+procedure TPrincipalFonePlayer.ListBox1DblClick(Sender: TObject);
 begin
   if(listbox1.itemindex <> -1) then
   begin
@@ -707,13 +713,13 @@ begin
   end;
 end;
 
-procedure TForm1.Panel10MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TPrincipalFonePlayer.Panel10MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   panel3.Visible := true;
 end;
 
-procedure TForm1.Image1DblClick(Sender: TObject);
+procedure TPrincipalFonePlayer.Image1DblClick(Sender: TObject);
 begin
   btnTocar.Caption := 'Tocar';
 

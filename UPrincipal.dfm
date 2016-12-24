@@ -1,4 +1,4 @@
-object Form1: TForm1
+object PrincipalFonePlayer: TPrincipalFonePlayer
   Left = 191
   Top = 118
   Align = alClient
@@ -7110,12 +7110,8 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1070
-    ExplicitHeight = 571
     object TabSheet1: TTabSheet
       Caption = 'M'#250'sica'
-      ExplicitWidth = 1062
-      ExplicitHeight = 539
       DesignSize = (
         1052
         529)
@@ -7128,8 +7124,6 @@ object Form1: TForm1
         Color = clSilver
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 1061
-        ExplicitHeight = 543
         object Panel4: TPanel
           Left = 6
           Top = 6
@@ -7143,8 +7137,6 @@ object Form1: TForm1
           TabOrder = 0
           OnDblClick = Panel4DblClick
           OnMouseDown = Panel4MouseDown
-          ExplicitWidth = 1050
-          ExplicitHeight = 528
           DesignSize = (
             1040
             518)
@@ -18217,8 +18209,6 @@ object Form1: TForm1
             Visible = False
             ParentDoubleBuffered = False
             TabOrder = 0
-            ExplicitLeft = 423
-            ExplicitTop = 392
           end
           object ProgressBar1: TProgressBar
             Left = 1
@@ -18227,8 +18217,6 @@ object Form1: TForm1
             Height = 11
             Align = alBottom
             TabOrder = 1
-            ExplicitTop = 497
-            ExplicitWidth = 1048
           end
           object StatusBar1: TStatusBar
             Left = 1
@@ -18239,8 +18227,6 @@ object Form1: TForm1
               item
                 Width = 50
               end>
-            ExplicitTop = 508
-            ExplicitWidth = 1048
           end
           object chkRA: TCheckBox
             Left = 1
@@ -18251,7 +18237,6 @@ object Form1: TForm1
             Caption = 'Reprodu'#231#227'o Aleat'#243'ria'
             TabOrder = 3
             Visible = False
-            ExplicitTop = 480
           end
           object RichEdit1: TRichEdit
             Left = 875
@@ -18270,8 +18255,6 @@ object Form1: TForm1
             Visible = False
             WordWrap = False
             Zoom = 100
-            ExplicitLeft = 885
-            ExplicitHeight = 496
           end
           object TrackBar1: TTrackBar
             Left = 720
@@ -18288,8 +18271,10 @@ object Form1: TForm1
     object TabSheet2: TTabSheet
       Caption = 'V'#237'deo'
       ImageIndex = 1
-      ExplicitWidth = 1062
-      ExplicitHeight = 539
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel9: TPanel
         Left = 0
         Top = 0
@@ -18300,8 +18285,6 @@ object Form1: TForm1
         Color = clSilver
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 1060
-        ExplicitHeight = 539
         object Panel10: TPanel
           Left = 6
           Top = 6
@@ -18315,8 +18298,6 @@ object Form1: TForm1
           TabOrder = 0
           OnDblClick = Panel10DblClick
           OnMouseDown = Panel10MouseDown
-          ExplicitWidth = 1050
-          ExplicitHeight = 528
         end
       end
     end
@@ -18328,8 +18309,6 @@ object Form1: TForm1
     Height = 17
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 1
-    ExplicitTop = 563
-    ExplicitWidth = 1083
   end
   object Panel3: TPanel
     Left = 10
@@ -18342,7 +18321,6 @@ object Form1: TForm1
     ParentBackground = False
     TabOrder = 2
     OnMouseDown = Panel3MouseDown
-    ExplicitHeight = 496
     object Panel7: TPanel
       Left = 1
       Top = 1
@@ -18365,7 +18343,6 @@ object Form1: TForm1
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
-      ExplicitHeight = 472
       DesignSize = (
         229
         462)
@@ -25525,7 +25502,6 @@ object Form1: TForm1
         OnDragDrop = ListBox1DragDrop
         OnDragOver = ListBox1DragOver
         OnEnter = ListBox1Enter
-        ExplicitHeight = 431
       end
     end
   end
@@ -25543,7 +25519,6 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 3
-    ExplicitWidth = 1067
   end
   object OpenDialog1: TOpenDialog
     Left = 925
@@ -25559,7 +25534,7 @@ object Form1: TForm1
     Left = 992
     Top = 80
     Bitmap = {
-      494C0101010004002C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000400400010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

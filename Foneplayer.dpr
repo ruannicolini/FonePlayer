@@ -1,14 +1,15 @@
 program Foneplayer;
 
 uses
-  Vcl.Forms,
-  UPrincipal in 'UPrincipal.pas' {Form1};
+  Vcl.Forms, windows, Registry,
+  UPrincipal in 'UPrincipal.pas' {PrincipalFonePlayer};
 
 {$R *.res}
-
 begin
+
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TPrincipalFonePlayer, PrincipalFonePlayer);
   Application.Run;
+
 end.
