@@ -11,6 +11,7 @@ object PrincipalFonePlayer: TPrincipalFonePlayer
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  PopupMenu = PopupActionBar1
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
@@ -25530,7 +25531,7 @@ object PrincipalFonePlayer: TPrincipalFonePlayer
     Left = 992
     Top = 80
     Bitmap = {
-      494C010101000400480010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101010004004C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -25670,11 +25671,15 @@ object PrincipalFonePlayer: TPrincipalFonePlayer
       000000000000}
   end
   object XPManifest1: TXPManifest
-    Left = 978
-    Top = 50
+    Left = 922
+    Top = 42
   end
   object PopupActionBar1: TPopupActionBar
-    Left = 626
-    Top = 58
+    Left = 978
+    Top = 42
+    object Manual: TMenuItem
+      Caption = 'Manual'
+      OnClick = ManualClick
+    end
   end
 end

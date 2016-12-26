@@ -56,6 +56,7 @@ uses
     XPManifest1: TXPManifest;
     TrackBar1: TTrackBar;
     PopupActionBar1: TPopupActionBar;
+    Manual: TMenuItem;
     procedure Panel4DblClick(Sender: TObject);
     procedure Panel10DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -94,6 +95,7 @@ uses
       Shift: TShiftState; X, Y: Integer);
     procedure TrackBar1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ManualClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -115,7 +117,7 @@ implementation
 
 {$R *.dfm}
 
-uses FileCtrl;
+uses FileCtrl, ShellAPI;
 
 procedure TPrincipalFonePlayer.Panel4DblClick(Sender: TObject);
 begin
@@ -639,6 +641,14 @@ begin
   btnMoveBaixo.Enabled := true;
   btnremove.Enabled := true;
   btnRemove.Enabled := true;
+end;
+
+procedure TPrincipalFonePlayer.ManualClick(Sender: TObject);
+var
+buffer: String;
+begin
+  buffer := 'http://github.com/ruannicolini/FonePlayer';
+  ShellExecute(Application.Handle, nil, PChar(buffer), nil, nil, SW_SHOWNORMAL); // da ShellAPI
 end;
 
 procedure TPrincipalFonePlayer.btnRemoveClick(Sender: TObject);

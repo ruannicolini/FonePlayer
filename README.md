@@ -9,5 +9,5 @@ Dois clicks em cima da imagem do fone na interface e já pode escolher uma musica
 Um click em cima do painel Playlist e ele some. Mais um onde ele ficava e ele volta!
 
 ###Utiliza sistema de arquivos 
-Na pasta do projeto o arquivo test.txt fica responsável pelo caminho das musicas da playlist. 
+Na pasta do usuário (c:/user/Nume_Usuário/FonePlayer) o arquivo PlayList.txt fica responsável pelo caminho das musicas da playlist. 
 IndPlayList.txt guarda a musica e o local onde estava quando o foneplayer foi fechado. Assim, pode-se retomar a musica de onde se parou.
