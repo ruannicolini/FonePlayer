@@ -1,7 +1,11 @@
 program Foneplayer;
 
+
+
 uses
-  Vcl.Forms, windows, Registry,
+  Vcl.Forms,
+  windows,
+  Registry,
   UPrincipal in 'UPrincipal.pas' {PrincipalFonePlayer};
 
 {$R *.res}

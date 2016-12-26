@@ -14,7 +14,8 @@ uses
   ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg,
   Registry, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
   cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar,
-  Vcl.AppEvnts, System.Types;
+  Vcl.AppEvnts, System.Types, System.IOUtils, Vcl.Menus,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup;
 
   type
   TPrincipalFonePlayer = class(TForm)
@@ -54,6 +55,7 @@ uses
     Image1: TImage;
     XPManifest1: TXPManifest;
     TrackBar1: TTrackBar;
+    PopupActionBar1: TPopupActionBar;
     procedure Panel4DblClick(Sender: TObject);
     procedure Panel10DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -96,6 +98,7 @@ uses
     { Private declarations }
   public
     { Public declarations }
+    function GetEnvVarValue(const VarName: string): string;
 
   end;
 
@@ -108,10 +111,11 @@ var
   arquivo: TextFile;
   statusBtnPlayPause : Boolean;
 
-
 implementation
 
 {$R *.dfm}
+
+uses FileCtrl;
 
 procedure TPrincipalFonePlayer.Panel4DblClick(Sender: TObject);
 begin
@@ -262,11 +266,36 @@ begin
 end;
 
 procedure TPrincipalFonePlayer.FormShow(Sender: TObject);
-var
-  i:integer;
-  str:String;
 begin
-//
+
+  // da System.IOUtils : Retonra caminho documents
+  //ShowMessage(TPath.GetDocumentsPath);
+
+  // Exibe a localização do diretório do Windows
+  //Pesquisar variáveis de ambiente do windows: https://en.wikipedia.org/wiki/Environment_variable#Default_values
+  //ShowMessage(GetEnvVarValue('USERPROFILE')+ '\FonePlayer'); //UserProfile é o caminho da pasta do usuários
+
+  //Cria Pasta FonePlayer na pasta do usuário
+  if NOT (DirectoryExists(GetEnvVarValue('USERPROFILE') + '\FonePlayer')) then
+  begin
+    ForceDirectories(GetEnvVarValue('USERPROFILE') + '\FonePlayer');
+  end;
+
+end;
+
+function TPrincipalFonePlayer.GetEnvVarValue(const VarName: string): string;
+var
+  BufSize: Integer;
+begin
+  BufSize := GetEnvironmentVariable(PChar(VarName), nil, 0);
+  if BufSize > 0 then
+  begin
+    SetLength(Result, BufSize - 1);
+    GetEnvironmentVariable(PChar(VarName),
+      PChar(Result), BufSize);
+  end
+  else
+    Result := '';
 end;
 
 procedure TPrincipalFonePlayer.btnTocarClick(Sender: TObject);
@@ -458,10 +487,18 @@ end;
 
 procedure TPrincipalFonePlayer.btnAddClick(Sender: TObject);
 begin
+
+  //Verifica se pasta do FonePlayer existe na pasta do usuário
+  if NOT (DirectoryExists(GetEnvVarValue('USERPROFILE') + '\FonePlayer')) then
+  begin
+    ForceDirectories(GetEnvVarValue('USERPROFILE') + '\FonePlayer');
+  end;
+
   if OpenDialog1.Execute then
   begin
       RichEdit1.Lines.Add(OpenDialog1.FileName);
-      RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
+      //RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
+      RichEdit1.Lines.SaveToFile(GetEnvVarValue('USERPROFILE') + '\FonePlayer\playList.txt');
       ListBox1.Items.Add(ExtractFileName(OpenDialog1.FileName));
       btnTocar.Enabled := true;
   end;
@@ -474,25 +511,27 @@ var
   iListB:integer;
   srtArq: string;
 begin
-  if (fileexists(extractFilepath(application.exename) + 'IndPlayList.txt')) then
+
+  //Deleta IndPlayList.txt
+  if (fileexists(GetEnvVarValue('USERPROFILE') + '\IndPlayList.txt')) then
   begin
-      Windows.DeleteFile(PChar(extractFilepath(application.exename) + 'IndPlayList.txt'));
+      Windows.DeleteFile(PChar(GetEnvVarValue('USERPROFILE') + '\IndPlayList.txt'));
   end;
+
 
   if(MediaPlayer1.Position <> ProgressBar1.Max)then
   begin
     if(ListBox1.Count > 0)then
     begin
 
-        AssignFile(arquivo, (extractFilepath(application.exename) + 'IndPlayList.txt') );
+        AssignFile(arquivo, (GetEnvVarValue('USERPROFILE') + '\IndPlayList.txt') );
         rewrite(Arquivo);
         WriteLn(arquivo, ListBox1.Items[IndPlayList]);
         WriteLn(arquivo, MediaPlayer1.Position);
         CloseFile(Arquivo);
 
-
        {OBS: Melhorar Isso aqui, ta tenso!}
-       AssignFile(arquivo, (extractFilepath(application.exename) + 'test.txt') );
+       AssignFile(arquivo, (GetEnvVarValue('USERPROFILE') + '\playList.txt') );
        Rewrite(arquivo);
        for iListB := 0 to ListBox1.Items.Count-1 do
        begin
@@ -505,7 +544,7 @@ begin
        CloseFile(Arquivo);
 
        RichEdit1.Lines.Clear;
-       AssignFile(arquivo, (extractFilepath(application.exename) + 'test.txt') );
+       AssignFile(arquivo, (GetEnvVarValue('USERPROFILE') + '\playList.txt') );
        reset(arquivo);
        While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
        begin
@@ -513,7 +552,7 @@ begin
               RichEdit1.Lines.Add(srtArq);
        end;
        CloseFile(Arquivo);
-       RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
+       RichEdit1.Lines.SaveToFile(GetEnvVarValue('USERPROFILE') + '\playList.txt');
     end;
   end;
 end;
@@ -550,10 +589,10 @@ begin
 
       //LEITURA DE ARQUIVOS
       //Se não foi passado nenhum caminho, tenta carregar Playlist;
-      if (fileexists(extractFilepath(application.exename) + 'test.txt')) then
+      if (fileexists(GetEnvVarValue('USERPROFILE') + '\FonePlayer\playList.txt')) then
       begin
-          RichEdit1.Lines.LoadFromFile(extractFilepath(application.exename) + 'test.txt');
-          StatusBar1.Panels.Items[0].Text := 'Aguardando Música... ';// 'Arquivo test.txt';
+          RichEdit1.Lines.LoadFromFile(GetEnvVarValue('USERPROFILE') + '\FonePlayer\playList.txt');
+          StatusBar1.Panels.Items[0].Text := 'Aguardando Música... ';// 'Arquivo playList.txt';
           btnTocar.Enabled := true;
 
           for i := 0 to RichEdit1.Lines.Count -1 do
@@ -565,10 +604,11 @@ begin
       end;
 
 
+
       //Se não foi passado nenhum caminho, tenta carregar musica que estava tocando da ultima vez;
-      if (fileexists(extractFilepath(application.exename) + 'IndPlayList.txt')) then
+      if (fileexists(GetEnvVarValue('USERPROFILE') + '\IndPlayList.txt')) then
       begin
-          AssignFile(arquivo, (extractFilepath(application.exename) + 'IndPlayList.txt') );
+          AssignFile(arquivo, (GetEnvVarValue('USERPROFILE') + '\IndPlayList.txt') );
           reset(arquivo);
           While Not (EOF(arquivo)) Do     //Enquanto não for o fim do arquivo faça
           begin
@@ -610,7 +650,7 @@ begin
       if ((ExtractFileName(RichEdit1.Lines[i]) = ListBox1.Items[ListBox1.ItemIndex])) then
       begin
         RichEdit1.Lines.Delete(i);
-        RichEdit1.Lines.SaveToFile(extractFilepath(application.exename) + 'test.txt');
+        RichEdit1.Lines.SaveToFile(GetEnvVarValue('USERPROFILE') + '\FonePlayer\playList.txt');
       end;
       status := false;
   end;

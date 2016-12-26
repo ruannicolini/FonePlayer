@@ -18271,10 +18271,6 @@ object PrincipalFonePlayer: TPrincipalFonePlayer
     object TabSheet2: TTabSheet
       Caption = 'V'#237'deo'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel9: TPanel
         Left = 0
         Top = 0
@@ -25534,7 +25530,7 @@ object PrincipalFonePlayer: TPrincipalFonePlayer
     Left = 992
     Top = 80
     Bitmap = {
-      494C010101000400400010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000400480010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -25676,5 +25672,9 @@ object PrincipalFonePlayer: TPrincipalFonePlayer
   object XPManifest1: TXPManifest
     Left = 978
     Top = 50
+  end
+  object PopupActionBar1: TPopupActionBar
+    Left = 626
+    Top = 58
   end
 end
