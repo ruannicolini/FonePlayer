@@ -12,7 +12,7 @@ uses
   ImgList,
   OleCtrls, SHDocVw,
   ToolWin, System.ImageList, VCLTee.TeCanvas, VCLTee.TeePenDlg,
-  Registry, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
+  cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
   cxContainer, cxEdit, cxTrackBar, XiTrackBar, cxProgressBar, XiProgressBar,
   Vcl.AppEvnts, System.Types, System.IOUtils, Vcl.Menus,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup;
@@ -101,6 +101,7 @@ uses
   public
     { Public declarations }
     function GetEnvVarValue(const VarName: string): string;
+    procedure RegisterFileType (prefixo: string; exe: string);
 
   end;
 
@@ -117,7 +118,7 @@ implementation
 
 {$R *.dfm}
 
-uses FileCtrl, ShellAPI;
+uses FileCtrl, ShellAPI, registry, shlobj;
 
 procedure TPrincipalFonePlayer.Panel4DblClick(Sender: TObject);
 begin
@@ -633,6 +634,10 @@ begin
       end;
 
   end;
+
+  //Registro
+  //ShowMessage(Application.ExeName);
+  //RegisterFileType('mp3', Application.ExeName);
 end;
 
 procedure TPrincipalFonePlayer.ListBox1Enter(Sender: TObject);
@@ -748,6 +753,42 @@ procedure TPrincipalFonePlayer.Panel7MouseDown(Sender: TObject; Button: TMouseBu
   Shift: TShiftState; X, Y: Integer);
 begin
   panel3.Visible := false;
+end;
+
+procedure TPrincipalFonePlayer.RegisterFileType(prefixo, exe: string);
+var
+  reg: TRegistry;
+begin
+  reg := TRegistry.Create;
+  //reg := TRegistry.Create(KEY_ALL_ACCESS);
+  //reg := TRegistry.Create(KEY_READ);
+  try
+      reg.RootKey := HKEY_CLASSES_ROOT;
+      reg.OpenKey ('.' + prefixo, True);
+      try
+        reg.Writestring('', prefixo + 'file');
+      finally
+        reg.CloseKey;
+      end;
+
+      reg.CreateKey (prefixo + 'file');
+      reg.OpenKey (prefixo + 'file\DefaultIcon', True);
+      try
+        reg.Writestring('', exe + ',0');
+      finally
+        reg.CloseKey;
+      end;
+
+      reg.OpenKey(prefixo + 'file\shell\open\command', True);
+      try
+        reg.Writestring('', exe + ' "¬1"');
+      finally
+        reg.CloseKey;
+      end;
+  finally
+      reg.Free;
+  end;
+ SHChangeNotify (SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nil, nil);
 end;
 
 procedure TPrincipalFonePlayer.ListBox1DblClick(Sender: TObject);
